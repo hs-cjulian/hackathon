@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styles from '@/styles/plan.module.scss'
+import css from '@/styles/plan.module.scss'
 import Modal from "@/components/Modal";
 
 function getRandomArbitrary(min, max) {
@@ -13,7 +13,7 @@ export async function getServerSideProps() {
     const tasks = json.tasks.filter(t => t.name).map(t => {
       return {
         ...t,
-        price: getRandomArbitrary(100, 400)
+        price: getRandomArbitrary(340, 998)
       }
     })
     return {
@@ -39,24 +39,26 @@ export default function Plan({ recommendations, numToShow = 3 }) {
     setShowModal(false)
   }
 
+  const modalRec = recommendations[modalTaskIndex]
+
   return (
-    <div className={styles.root}>
-      <div className={styles.header}>
+    <div className={css.root}>
+      <div className={css.header}>
         <img src={'/logo.svg'} />
-        <ul className={styles.nav}>
-          <li className={styles.navItem}>Browse Categories</li>
-          <li className={styles.navItem}>Write a Review</li>
-          <li className={styles.navItem} style={{fontWeight: 600}}>Project Planner</li>
+        <ul className={css.nav}>
+          <li className={css.navItem}>Browse Categories</li>
+          <li className={css.navItem}>Write a Review</li>
+          <li className={css.navItem} style={{fontWeight: 600}}>Project Planner</li>
         </ul>
       </div>
-      <div className={styles.content}>
-        <section className={styles.sidebar}>
-          <div className={styles.welcome}>
+      <div className={css.content}>
+        <section className={css.sidebar}>
+          <div className={css.welcome}>
             Hi, 👋 Welcome to your
-            personalized planner <span className={styles.exclamation}>!</span>
+            personalized planner <span className={css.exclamation}>!</span>
           </div>
-          <div className={styles.sidenav}>
-            <ul className={styles.sidenavItems}>
+          <div className={css.sidenav}>
+            <ul className={css.sidenavItems}>
               <li>Home Profile</li>
               <li style={{ color: '#32527C', fontWeight: 700 }}>Project Planner</li>
               <li>Service Requests</li>
@@ -65,25 +67,25 @@ export default function Plan({ recommendations, numToShow = 3 }) {
             </ul>
           </div>
         </section>
-        <main className={styles.main}>
-          <div className={styles.recommendations}>
+        <main className={css.main}>
+          <div className={css.recommendations}>
             {
               recommendations.slice(0, numToShow).map((rec, i) => {
                 return (
                   <button
-                    className={styles.recommendation}
+                    className={css.recommendation}
                     key={i}
                     onClick={openModal.bind(null, i)}
                   >
                     <img src={`http://localhost:3000/assets/categories/${rec.category_id}.jpg`} />
-                    <div className={styles.taskNameBenefit}>
-                      <h2 className={styles.taskName}>{rec.name}</h2>
-                      <p className={styles.benefit}>
-                        <img className={styles.sparkles} src='/sparkles.svg' />Prevents costly damage
+                    <div className={css.taskNameBenefit}>
+                      <h2 className={css.taskName}>{rec.name}</h2>
+                      <p className={css.benefit}>
+                        <img className={css.sparkles} src='/sparkles.svg' />Prevents costly damage
                       </p>
                     </div>
-                    <div className={styles.avgCost}>
-                      ${rec.price} / <span>average cost</span>
+                    <div className={css.avgCost}>
+                      $ {rec.price} / <span>average cost</span>
                     </div>
                   </button>
 
@@ -96,8 +98,45 @@ export default function Plan({ recommendations, numToShow = 3 }) {
       {
         !showModal ? null : (
           <Modal closeModal={closeModal}>
-            <div>
-              <h1>{recommendations[modalTaskIndex].name}</h1>
+            <div className={css.modalWrapper}>
+              <div className={css.modalTop}>
+                <img className={css.modalImg} src={`http://localhost:3000/assets/categories/${modalRec.category_id}.jpg`} />
+                <div className={css.modalDetails}>
+                  <h3>{modalRec.name}</h3>
+                  <span className={css.completed}>324 homeowners completed in your area </span>
+                  <div className={css.modalAvgCost}>
+                    $ {modalRec.price} / <span>average cost</span>
+                  </div>
+                  <div className={css.modalBenefits}>
+                    <h4 className={css.benefitsHeading}>Value and benefits</h4>
+                    <ul className={css.benefitsList}>
+                      <li>Prolonged roof lifespan</li>
+                      <li>Early problem detection</li>
+                      <li>Energy efficiency</li>
+                      <li>Property value</li>
+                      <li>Prevents interior damage</li>
+                      <li>Mold and mildew prevention</li>
+                      <li>Safety</li>
+                    </ul>
+                  </div>
+
+                </div>
+              </div>
+
+              <div className={css.modalPros}>
+                <h4>Pros who can help you complete this project</h4>
+                <div className={css.modalProsList}>
+                  <div className={css.modalPro}>
+                    <div className={css.proPlaceholder} />
+                  </div>
+                  <div className={css.modalPro}>
+                    <div className={css.proPlaceholder} />
+                  </div>
+                  <div className={css.modalPro}>
+                    <div className={css.proPlaceholder} />
+                  </div>
+                </div>
+              </div>
             </div>
           </Modal>
         )

@@ -1,7 +1,9 @@
 .shade {
   align-items: center;
   justify-content: space-around;
-  background-color: rgba(0, 0, 0, 0.6);
+  background: rgba(165, 165, 165, 0.40);
+  backdrop-filter: blur(2px);
+
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -14,6 +16,7 @@
 
 .content {
   background-color: white;
-  border-radius: 8px;
+  border-radius: 16px;
   max-width: 100%;
+  overflow: hidden;
 }
