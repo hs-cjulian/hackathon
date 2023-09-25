@@ -1,14 +1,164 @@
+$page-bg-color: #EFF2F6;
+$component-bg-color: #FBFBFB;
+
 .root {
   background-color: #EFF2F6;
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
-.recommendations {
+.header {
+  img {
+    display: block;
+    margin-right: 40px;
+  }
 
+  display: flex;
+  align-items: center;
+  background-color: $component-bg-color;
+  padding: 16px 40px;
+
+  border-bottom: 1px solid #DEE5ED;
+}
+
+.nav {
+  display: flex;
+  list-style-type: none;
+}
+
+.navItem {
+  &:hover {
+    cursor: pointer;
+  }
+  margin-right: 24px;
+
+  &.selected {
+    font-weight: 600;
+  }
+}
+
+.content {
+  display: flex;
+  flex: 1 0 100%;
+  flex-direction: row;
+  padding-top: 40px;
+  height: 100%;
+}
+
+.sidebar {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  width: 272px;
+  min-height: 100%;
+}
+
+.welcome {
+  background-color: $component-bg-color;
+  color: #031228;
+  border-radius: 0 8px 8px 0;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 19px 12.5px 20px 40px;
+}
+.exclamation {
+  font-size: 14px;
+}
+
+.sidenav {
+  background-color: $component-bg-color;
+  border-radius: 0 8px 0 0;
+  height: 100%;
+  margin-top: 26px;
+  padding: 40px;
+}
+
+.sidenavItems {
+  color: #A5B2BB;
+  list-style-type: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+
+  li {
+    margin: 0 0 28px;
+  }
+}
+
+.main {
+  padding: 0 40px 40px 30px;
+}
+
+.recommendations {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 36px;
 }
 
 .recommendation {
-  background-color: #FFF;
-  border-radius: 8px;
+  background-color: $component-bg-color;
+  box-shadow: 0px 1px 2px -1px rgba(16, 24, 40, 0.10), 0px 1px 3px 0px rgba(16, 24, 40, 0.10);
+  border-radius: 12px;
+  border: 0 none;
+  display: flex;
+  flex-direction: column;
+  max-width: 350px;
+  padding: 16px 16px 24px;
+  flex: 1 1 33.333%;
+  text-align: left;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  img {
+    object-fit: cover;
+    aspect-ratio: 308 / 210;
+    width: 100%;
+    border-radius: 4px;
+  }
 }
+
+.taskNameBenefit {
+  margin-top: 23px;
+  flex: 1 1 auto;
+}
+
+.taskName {
+  color: #2B3645;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.benefit {
+  color: #A6AABA;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  margin-top: 12px;
+  .sparkles {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.avgCost {
+  color: #2B3645;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 16px;
+  margin-top: 33px;
+
+  span {
+    color: #A6AABA;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+  }
+}
+
