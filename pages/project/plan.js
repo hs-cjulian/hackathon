@@ -1,8 +1,11 @@
+import React, { useState } from 'react'
+import styles from '@/styles/plan.module.scss'
+import Modal from "@/components/Modal";
+
 function getRandomArbitrary(min, max) {
   return (Math.random() * (max - min) + min).toFixed(2);
 }
 
-import styles from '@/styles/plan.module.scss'
 export async function getServerSideProps() {
   try {
     const response = await fetch('http://127.0.0.1:3000/recommendations?postal_code=K7C0A6')
@@ -24,6 +27,18 @@ export async function getServerSideProps() {
 }
 
 export default function Plan({ recommendations, numToShow = 3 }) {
+  const [ showModal, setShowModal ] = useState(false)
+  const [ modalTaskIndex, setModalTaskIndex ] = useState(0)
+
+  const openModal = (index) => {
+    setModalTaskIndex(index)
+    setShowModal(true)
+  }
+
+  const closeModal = () => {
+    setShowModal(false)
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.header}>
@@ -58,7 +73,7 @@ export default function Plan({ recommendations, numToShow = 3 }) {
                   <button
                     className={styles.recommendation}
                     key={i}
-                    onClick={() => alert(`pretend this is a modal for ${rec.name}`)}
+                    onClick={openModal.bind(null, i)}
                   >
                     <img src={`http://localhost:3000/assets/categories/${rec.category_id}.jpg`} />
                     <div className={styles.taskNameBenefit}>
@@ -78,6 +93,15 @@ export default function Plan({ recommendations, numToShow = 3 }) {
           </div>
         </main>
       </div>
+      {
+        !showModal ? null : (
+          <Modal closeModal={closeModal}>
+            <div>
+              <h1>{recommendations[modalTaskIndex].name}</h1>
+            </div>
+          </Modal>
+        )
+      }
     </div>
   )
 }
