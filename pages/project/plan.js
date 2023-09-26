@@ -6,14 +6,23 @@ function getRandomArbitrary(min, max) {
   return (Math.random() * (max - min) + min).toFixed(2);
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req, res, query }) {
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=600, stale-while-revalidate=600'
+  )
   try {
-    const response = await fetch('http://127.0.0.1:3000/recommendations?postal_code=K7C0A6')
+    const postalCode = query['postalCode'].replace(/\s/g, '');
+    const url = `http://127.0.0.1:3000/recommendations?postal_code=${postalCode}`
+    console.log(url)
+
+    const response = await fetch(url, { cache: 'force-cache' })
     const json = await response.json()
     const tasks = json.tasks.filter(t => t.name).map(t => {
       return {
         ...t,
-        price: getRandomArbitrary(340, 998)
+        // price: getRandomArbitrary(340, 998)
+        price: t.price.replace('$','')
       }
     })
     return {
@@ -29,6 +38,7 @@ export async function getServerSideProps() {
 export default function Plan({ recommendations, numToShow = 3 }) {
   const [ showModal, setShowModal ] = useState(false)
   const [ modalTaskIndex, setModalTaskIndex ] = useState(0)
+  const [ selectedTasks, setSelectedTasks ] = useState([])
 
   const openModal = (index) => {
     setModalTaskIndex(index)
@@ -37,6 +47,18 @@ export default function Plan({ recommendations, numToShow = 3 }) {
 
   const closeModal = () => {
     setShowModal(false)
+  }
+
+  const selectTask = (index) => {
+    setSelectedTasks(prev => {
+      return [...prev, index]
+    })
+  }
+
+  const removeTask = (index) => {
+    setSelectedTasks(prev => {
+      return prev.filter(i => i !== index)
+    })
   }
 
   const modalRec = recommendations[modalTaskIndex]
@@ -81,12 +103,37 @@ export default function Plan({ recommendations, numToShow = 3 }) {
                     <div className={css.taskNameBenefit}>
                       <h2 className={css.taskName}>{rec.name}</h2>
                       <p className={css.benefit}>
-                        <img className={css.sparkles} src='/sparkles.svg' />Prevents costly damage
+                        <img className={css.sparkles} src='/sparkles.svg'/> Prevents costly damage
                       </p>
                     </div>
                     <div className={css.avgCost}>
                       $ {rec.price} / <span>average cost</span>
                     </div>
+
+                    {
+                      selectedTasks.includes(i) ? null : (
+                        <a
+                          className={css.button}
+                          onClick={(event) => {
+                          event.stopPropagation();
+                          selectTask(i)
+                        }}>
+                          Select
+                        </a>
+                      )
+                    }
+                    {
+                      !selectedTasks.includes(i) ? null : (
+                        <a
+                          className={css.button}
+                          onClick={(event) => {
+                          event.stopPropagation();
+                          removeTask(i)
+                        }}>
+                          Remove
+                        </a>
+                      )
+                    }
                   </button>
 
                 )
@@ -94,6 +141,21 @@ export default function Plan({ recommendations, numToShow = 3 }) {
             }
           </div>
         </main>
+        {
+          selectedTasks.length === 0 ? null : (
+            <section className={css.selectedWrapper}>
+              {
+                selectedTasks.map((index) => {
+                  return (
+                    <div key={index}>
+                      { recommendations[index].name }
+                    </div>
+                  )
+                })
+              }
+            </section>
+          )
+        }
       </div>
       {
         !showModal ? null : (
@@ -107,8 +169,11 @@ export default function Plan({ recommendations, numToShow = 3 }) {
                   <div className={css.modalAvgCost}>
                     $ {modalRec.price} / <span>average cost</span>
                   </div>
+                  <div className={css.line}/>
                   <div className={css.modalBenefits}>
-                    <h4 className={css.benefitsHeading}>Value and benefits</h4>
+                    <h4 className={css.benefitsHeading}>
+                      <img className={css.sparkles} src='/dark-sparkles.svg'/> Value and benefits
+                    </h4>
                     <ul className={css.benefitsList}>
                       <li>Prolonged roof lifespan</li>
                       <li>Early problem detection</li>
