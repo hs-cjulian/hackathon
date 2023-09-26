@@ -166,6 +166,10 @@ export default function Plan({ recommendations }) {
                 })
               }
               </ol>
+              <div className={css.selectedButtons}>
+                <button className={css.button}>Share</button>
+                <button className={css.proButton}>Find Pros</button>
+              </div>
             </section>
           )
         }
