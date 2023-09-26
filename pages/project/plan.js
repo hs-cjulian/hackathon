@@ -35,10 +35,11 @@ export async function getServerSideProps({ req, res, query }) {
   }
 }
 
-export default function Plan({ recommendations, numToShow = 3 }) {
+export default function Plan({ recommendations }) {
   const [ showModal, setShowModal ] = useState(false)
   const [ modalTaskIndex, setModalTaskIndex ] = useState(0)
   const [ selectedTasks, setSelectedTasks ] = useState([])
+  const [ numToShow, setNumToShow ] = useState(3)
 
   const openModal = (index) => {
     setModalTaskIndex(index)
@@ -139,20 +140,32 @@ export default function Plan({ recommendations, numToShow = 3 }) {
                 )
               })
             }
+            <div
+              className={css.more}
+              onClick={() => { setNumToShow(prev => prev + 1) }}
+            >
+              <img className={css.moreIcon} src='/plus.svg'/>
+            </div>
           </div>
         </main>
         {
           selectedTasks.length === 0 ? null : (
             <section className={css.selectedWrapper}>
+              <h3 className={css.projectPlan}>
+                <img className={css.sparkles} src='/clipboard.svg'/> Project Plan
+              </h3>
+              <div className={css.line}/>
+              <ol>
               {
                 selectedTasks.map((index) => {
                   return (
-                    <div key={index}>
-                      { recommendations[index].name }
-                    </div>
+                    <li key={index}>
+                      &nbsp;{ recommendations[index].name }
+                    </li>
                   )
                 })
               }
+              </ol>
             </section>
           )
         }
