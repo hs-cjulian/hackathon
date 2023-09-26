@@ -12,7 +12,7 @@ export async function getServerSideProps({ req, res, query }) {
     'public, s-maxage=600, stale-while-revalidate=600'
   )
   try {
-    const postalCode = query['postalCode'].replace(/\s/g, '');
+    const postalCode = query['postalCode'].replace(/\s/g, '').toUpperCase();
     const url = `http://127.0.0.1:3000/recommendations?postal_code=${postalCode}`
     console.log(url)
 
@@ -67,7 +67,7 @@ export default function Plan({ recommendations }) {
   return (
     <div className={css.root}>
       <div className={css.header}>
-        <img src={'/logo.svg'} />
+        <a href={"http://localhost:3000"}><img src={'/logo.svg'} /></a>
         <ul className={css.nav}>
           <li className={css.navItem}>Browse Categories</li>
           <li className={css.navItem}>Write a Review</li>
